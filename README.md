@@ -1,6 +1,29 @@
 # 模型作品库
 
-一个仅在本机运行的模型测试作品管理网站。原生 HTML/CSS/JavaScript + Python 标准库 + SQLite，不需要 npm、云端账号或第三方依赖。
+包含**公开作品社区**和**本地私人作品库**两个独立版本。两者的数据不会自动互通。
+
+## 公开作品社区
+
+入口：**https://7YYYB.github.io/model-artifact-gallery/**
+
+- 任何人均可浏览和上传，**无需登录或注册**。选择 HTML、SVG、PNG、JPEG、WebP 或 GIF 自包含文件，填写标题、模型和公开署名，确认内容可公开后发布。
+- 单文件最大 **1 MiB（1,048,576 字节）**，前端和数据库均校验真实内容大小；不设每账户作品数、全站作品数或每小时上传次数限制。模型选项包含51个预置模型及自定义名称。
+- 作品、提示词和署名均公开，署名和模型名称由投稿者填写，**不代表身份或模型来源认证**。请勿上传个人隐私、密钥或侵权内容。
+- HTML/SVG 在隔离 iframe 中运行，可执行自身脚本，但不能读取社区页面或联网。请内联 CSS/JS，并将图片嵌入文件；依赖 CDN、外链字体或 fetch 的作品无法完整预览。隔离不能防止耗费 CPU 的脚本，不要在作品内输入密码或支付资料。
+- 访客没有修改和删除数据库记录的权限。需要撤回作品时，请通过仓库 Issues 向管理员提供作品标题和具体信息（不要附私密资料）；管理员核对后在 Supabase 后台删除。内容目前没有发布前人工审核。
+- 应用不设数量限额，但 **Supabase/GitHub 的存储、流量、请求及免费套餐额度仍然有效**；超过平台额度可能影响服务。免登录开放上传可能产生垃圾内容和额外资源消耗，管理员应定期检查 Usage 和清理违规内容。
+
+### 社区部署与维护
+
+- `docs/` 是 GitHub Pages 发布目录，来源为 `main` 分支的 `/docs`；不是根目录的本地版 `index.html`。
+- `cloud-schema.sql` 定义表、RLS及上传/内容读取 RPC，在 Supabase SQL Editor 执行。匿名访问只能读取作品元数据并调用受校验的上传/预览函数，不能直接写表或删改作品。
+- `cloud-config.js` 和 `docs/cloud-config.js` 只包含项目 URL 与浏览器可公开的 Publishable key。此公钥不是管理员凭据；安全边界依赖数据库权限/RLS。**禁止提交 secret、service_role、数据库密码或个人访问令牌。**
+- 根目录 `cloud.html`、`cloud.js`、`cloud.css` 是社区源文件；更新时同步到 `docs/index.html`、`docs/cloud.js`、`docs/cloud.css`（站点首页链接保持 `./index.html`）。前端使用版本固定的 Supabase JS 浏览器组件，经 CDN 加载。
+- 不要发布 `data/`、私人作品、数据库备份或 `HANDOFF.md`。上传到社区不会写入 GitHub 仓库，而是写入 Supabase 数据库；GitHub 只托管网页和源码。
+
+## 本地私人作品库
+
+以下其余说明适用于本地版。原生 HTML/CSS/JavaScript + Python 标准库 + SQLite，不需要 npm、云端账号或第三方依赖。
 
 ## 启动
 
