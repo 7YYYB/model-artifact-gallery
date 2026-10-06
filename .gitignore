@@ -1,0 +1,14 @@
+data/
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+*.sqlite*
+*.db
+*.log
+.verify-*/
+.probe-*/
+HANDOFF.md
+*.zip
+.vscode/
